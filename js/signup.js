@@ -5,7 +5,7 @@ document.getElementById("loginForm").addEventListener("submit",(event)=>{
 const confirmationR;
 
 function phoneAuth() {
-    const phoneNumber = document.getElementById("phone");
+    const phoneNumber = document.getElementById("phone").value
     const appVerifier = window.recaptchaVerifier;
     firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
     .then((confirmationResult) => {
@@ -25,12 +25,21 @@ function signup() {
     const user = result.user;
     const email = document.getElementById("email").value
     const password = document.getElementById("password").value
+    const confpassword=document.getElementById("confpassword").value
     const name=document.getElementById("name").value
+    const address=document.getElementById("address").value
+
+    if(password!=confpassword) {
+        document.getElementById("error").innerHTML=`<div>Passworf and Confrim Password are different. Kindly enter same Password!</div>`
+        return
+    }
     firebase.auth().createUserWithEmailAndPassword(email, password). then((cred) => {
         return firebase.firestore().collection("users").doc(cred.user.uid).set({
             email:email,
             password:password,
-            name:name
+            name:name,
+            address:address,
+            phone:phone
         })
         .then((docRef) => {
             alert("Signup successful")

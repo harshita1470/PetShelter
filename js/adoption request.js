@@ -4,12 +4,11 @@ function sendMail(head) {
         if(!user){
             location.replace("index.html")
         }else{
-           database.collection("pets").doc(head.uid).get().then(snapshot => {
-               database.collection("users").doc(head.owner).collection("uploads").add({
-                  requestId:user.uid,
-                  phone:user.phone,
-                  petId:head.uid
-               })
+            database.collection("pets").doc(head.uid).collection("requests").add({
+                  requestId:user.uid
+            });
+            database.collection("users").doc(user.uid).collection("requestsMade").add({
+                petId:head.uid
             });
         }
     });
